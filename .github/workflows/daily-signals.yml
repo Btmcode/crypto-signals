@@ -1,0 +1,39 @@
+name: Günlük Sinyal Üretimi
+
+on:
+  schedule:
+    - cron: '0 9 * * *'   # Her gün UTC 09:00'da çalışır
+  workflow_dispatch:      # Gerekirse elle de tetiklemeye izin verir
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Depoyu Çek
+      uses: actions/checkout@v3
+
+    - name: Python Kur
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Gerekli Paketleri Yükle
+      run: pip install requests
+
+    - name: API Anahtarını Script’e Ekle ve Sinyalleri Üret
+      env:
+        CMC_KEY: ${{ secrets.CMC_KEY }}
+      run: |
+        # CoinMarketCap anahtarını yerleştir
+        sed -i "s/YOUR_API_KEY_HERE/${{ secrets.CMC_KEY }}/g" generate_signals.py
+        # Scripti çalıştır
+        python generate_signals.py
+
+    - name: signals.json’u Commit & Push
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "actions@github.com"
+        git add signals.json
+        git commit -m "Günlük sinyal güncellemesi"
+        git push
