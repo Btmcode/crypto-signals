@@ -1,7 +1,7 @@
 import requests, json
 from datetime import datetime
 
-API_KEY = "8c2ff4cf-834e-451a-8457-55d2da6a0ba0"
+API_KEY = "YOUR_API_KEY"
 HEADERS = {"Accepts":"application/json","X-CMC_PRO_API_KEY":API_KEY}
 COIN_SYMBOLS = ["YFI","SHIB","ALP","ZIL","BNB","NOT","BTTC","XRP","MEME","ETC"]
 
